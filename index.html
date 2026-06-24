@@ -613,7 +613,7 @@
     try {
       const ds = dateStr(currentDate);
       const jql = encodeURIComponent(`worklogDate = "${ds}" AND worklogAuthor = currentUser() ORDER BY updated DESC`);
-      const res = await jiraGet(`/rest/api/3/search?jql=${jql}&fields=summary,status,project,worklog,timespent,issuetype&maxResults=50`);
+      const res = await jiraGet(`/rest/api/3/search/jql?jql=${jql}&fields=summary,status,project,worklog,timespent,issuetype&maxResults=50`);
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
