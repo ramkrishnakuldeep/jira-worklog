@@ -586,9 +586,12 @@
   }
 
   // ── API ──
+  const PROXY = 'https://jira-worklog.kuldeipbhimte.workers.dev/';
+
   async function jiraGet(path) {
     const creds = btoa(`${config.email}:${config.token}`);
-    return fetch(`https://${config.domain}${path}`, {
+    const proxyUrl = `${PROXY}?domain=${encodeURIComponent(config.domain)}&path=${encodeURIComponent(path)}`;
+    return fetch(proxyUrl, {
       headers: {
         'Authorization': `Basic ${creds}`,
         'Accept': 'application/json'
