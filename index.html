@@ -436,6 +436,7 @@
       <button onclick="changeDate(1)" title="Next day">›</button>
     </div>
     <button class="btn btn-primary" onclick="fetchWorklogs()">↻ Refresh</button>
+    <button class="btn btn-ghost" onclick="downloadImage()" id="download-btn" style="display:none;">⬇ Save as Image</button>
     <button class="logout-btn" onclick="logout()">Sign out</button>
   </div>
 </div>
@@ -483,6 +484,33 @@
 </div>
 
 <script>
+  // ── Download as Image ──
+  async function downloadImage() {
+    const btn = document.getElementById('download-btn');
+    btn.textContent = '⏳ Generating...';
+    btn.disabled = true;
+
+    try {
+      const canvas = await html2canvas(document.getElementById('dashboard'), {
+        backgroundColor: '#0f1117',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+
+      const link = document.createElement('a');
+      const ds = dateStr(currentDate);
+      link.download = `worklog-${ds}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (e) {
+      alert('Failed to generate image: ' + e.message);
+    }
+
+    btn.textContent = '⬇ Save as Image';
+    btn.disabled = false;
+  }
+
   // ── State ──
   let currentDate = new Date();
   let config = null;
@@ -720,7 +748,9 @@
     }).join('');
 
     dashboard.innerHTML = statsHtml + cardsHtml;
+    document.getElementById('download-btn').style.display = 'flex';
   }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
